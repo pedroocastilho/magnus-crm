@@ -24,7 +24,7 @@ jobs:
           target: twenty
           push: true
           build-args: |
-            APP_VERSION=magnus-2.27.0
+            APP_VERSION=2.27.0
           tags: |
             ghcr.io/pedroocastilho/magnus-crm:magnus-2.27.0
             ghcr.io/pedroocastilho/magnus-crm:latest
