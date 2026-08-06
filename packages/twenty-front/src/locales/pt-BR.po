@@ -3231,7 +3231,7 @@ msgstr "por {author}"
 #. js-lingui-id: 8Pfllj
 #: src/modules/auth/sign-in-up/components/FooterNote.tsx
 msgid "By using Twenty, you agree to the"
-msgstr "Ao usar o Twenty, você concorda com os"
+msgstr "Ao usar o Magnus CRM, você concorda com os"
 
 #. js-lingui-id: Yx41df
 #: src/modules/auth/sign-in-up/components/FooterNote.tsx
@@ -13926,7 +13926,7 @@ msgstr "Nome da página"
 #. js-lingui-id: NRvxzv
 #: src/pages/not-found/NotFound.tsx
 msgid "Page Not Found | Twenty"
-msgstr "Página não encontrada | Twenty"
+msgstr "Página não encontrada | Magnus CRM"
 
 #. js-lingui-id: sF+Xp9
 #: src/modules/settings/event-logs/components/EventLogTableSelector.tsx
@@ -20431,7 +20431,7 @@ msgstr "Peso"
 #. js-lingui-id: nTuObL
 #: src/pages/auth/SignInUp.tsx
 msgid "Welcome to Twenty"
-msgstr "Bem-vindo ao Twenty"
+msgstr "Bem-vindo ao Magnus CRM"
 
 #. js-lingui-id: t8ZvkC
 #: src/modules/onboarding/constants/WelcomeTitleMessage.ts
