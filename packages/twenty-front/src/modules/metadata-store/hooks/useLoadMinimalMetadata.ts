@@ -1,3 +1,4 @@
+import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { FIND_MINIMAL_METADATA } from '@/metadata-store/graphql/queries/findMinimalMetadata';
 import {
   ALL_METADATA_ENTITY_KEYS,
@@ -11,7 +12,13 @@ import { mapAllMetadataNameToEntityKey } from '@/metadata-store/utils/mapAllMeta
 import { useApolloClient } from '@apollo/client/react';
 import { useStore } from 'jotai';
 import { useCallback } from 'react';
+import { SOURCE_LOCALE } from 'twenty-shared/translations';
 import { isDefined } from 'twenty-shared/utils';
+
+// Rotulos padrao sao traduzidos pelo servidor conforme o locale do membro; o hash
+// das colecoes nao muda com o idioma, entao registramos o locale usado na carga
+// para invalidar o cache quando o usuario troca de idioma.
+const METADATA_STORE_LOCALE_KEY = 'metadataStoreLoadedLocale';
 
 export const useLoadMinimalMetadata = () => {
   const client = useApolloClient();
@@ -30,6 +37,11 @@ export const useLoadMinimalMetadata = () => {
     const { objectMetadataItems, views, collectionHashes } =
       result.data.minimalMetadata;
 
+    const currentLocale =
+      store.get(currentWorkspaceMemberState.atom)?.locale ?? SOURCE_LOCALE;
+    const localeChanged =
+      window.localStorage.getItem(METADATA_STORE_LOCALE_KEY) !== currentLocale;
+
     const staleEntityKeys: MetadataEntityKey[] = [];
 
     const entityKeysWithServerHash = new Set<MetadataEntityKey>();
@@ -46,7 +58,7 @@ export const useLoadMinimalMetadata = () => {
 
         const entry = store.get(metadataStoreState.atomFamily(entityKey));
 
-        if (entry.currentCollectionHash !== hash) {
+        if (entry.currentCollectionHash !== hash || localeChanged) {
           staleEntityKeys.push(entityKey);
         }
 
@@ -70,7 +82,7 @@ export const useLoadMinimalMetadata = () => {
       metadataStoreState.atomFamily('objectMetadataItems'),
     );
 
-    if (objectsEntry.status === 'empty') {
+    if (objectsEntry.status === 'empty' || localeChanged) {
       store.set(
         metadataStoreState.atomFamily('objectMetadataItems'),
         (prev) => ({
@@ -85,7 +97,7 @@ export const useLoadMinimalMetadata = () => {
 
     const viewsEntry = store.get(metadataStoreState.atomFamily('views'));
 
-    if (viewsEntry.status === 'empty') {
+    if (viewsEntry.status === 'empty' || localeChanged) {
       store.set(metadataStoreState.atomFamily('views'), (prev) => ({
         ...prev,
         current: views as unknown as FlatView[],
@@ -94,6 +106,8 @@ export const useLoadMinimalMetadata = () => {
         draftCollectionHash: undefined,
       }));
     }
+
+    window.localStorage.setItem(METADATA_STORE_LOCALE_KEY, currentLocale);
 
     return { staleEntityKeys };
   }, [client, store]);
