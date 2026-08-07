@@ -5,7 +5,7 @@ export const CREATE_CALENDAR_EVENT_ACTION: {
   type: Extract<WorkflowActionType, 'CREATE_CALENDAR_EVENT'>;
   icon: string;
 } = {
-  defaultLabel: 'Create Calendar Event',
+  defaultLabel: 'Criar Evento na Agenda',
   type: 'CREATE_CALENDAR_EVENT',
   icon: 'IconCalendarEvent',
 };

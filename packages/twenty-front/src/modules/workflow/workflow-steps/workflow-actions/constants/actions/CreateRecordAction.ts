@@ -5,7 +5,7 @@ export const CREATE_RECORD_ACTION: {
   type: Extract<WorkflowActionType, 'CREATE_RECORD'>;
   icon: string;
 } = {
-  defaultLabel: 'Create Record',
+  defaultLabel: 'Criar Registro',
   type: 'CREATE_RECORD',
   icon: 'IconPlus',
 };

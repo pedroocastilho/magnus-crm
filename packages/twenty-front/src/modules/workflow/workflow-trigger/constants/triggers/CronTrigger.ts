@@ -5,7 +5,7 @@ export const CRON_TRIGGER: {
   type: WorkflowTriggerType;
   icon: string;
 } = {
-  defaultLabel: 'On a schedule',
+  defaultLabel: 'Agendado',
   type: 'CRON',
   icon: 'IconClock',
 };

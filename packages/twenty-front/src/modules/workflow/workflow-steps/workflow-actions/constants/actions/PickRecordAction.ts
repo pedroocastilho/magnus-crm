@@ -5,7 +5,7 @@ export const PICK_RECORD_ACTION: {
   type: Extract<WorkflowActionType, 'PICK_RECORD'>;
   icon: string;
 } = {
-  defaultLabel: 'Pick Record',
+  defaultLabel: 'Escolher Registro',
   type: 'PICK_RECORD',
   icon: 'IconArrowsShuffle',
 };

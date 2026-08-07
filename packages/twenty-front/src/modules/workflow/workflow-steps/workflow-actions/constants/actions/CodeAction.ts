@@ -5,7 +5,7 @@ export const CODE_ACTION: {
   type: Extract<WorkflowActionType, 'CODE'>;
   icon: string;
 } = {
-  defaultLabel: 'Code - Logic Function',
+  defaultLabel: 'Código (Função)',
   type: 'CODE',
   icon: 'IconCode',
 };

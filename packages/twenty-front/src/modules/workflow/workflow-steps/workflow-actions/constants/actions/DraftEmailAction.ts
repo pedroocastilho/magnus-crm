@@ -5,7 +5,7 @@ export const DRAFT_EMAIL_ACTION: {
   type: Extract<WorkflowActionType, 'DRAFT_EMAIL'>;
   icon: string;
 } = {
-  defaultLabel: 'Draft Email',
+  defaultLabel: 'Rascunhar E-mail',
   type: 'DRAFT_EMAIL',
   icon: 'IconMailPlus',
 };

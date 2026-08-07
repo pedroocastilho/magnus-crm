@@ -5,7 +5,7 @@ export const IF_ELSE_ACTION: {
   type: Extract<WorkflowActionType, 'IF_ELSE'>;
   icon: string;
 } = {
-  defaultLabel: 'If/else',
+  defaultLabel: 'Se/Senão',
   type: 'IF_ELSE',
   icon: 'IconArrowsSplit',
 };

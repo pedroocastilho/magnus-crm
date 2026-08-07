@@ -5,7 +5,7 @@ export const MANUAL_TRIGGER: {
   type: WorkflowTriggerType;
   icon: string;
 } = {
-  defaultLabel: 'Launch manually',
+  defaultLabel: 'Execução manual',
   type: 'MANUAL',
   icon: 'IconHandMove',
 };

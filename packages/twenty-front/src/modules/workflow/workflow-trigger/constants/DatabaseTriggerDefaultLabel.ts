@@ -1,6 +1,6 @@
 export enum DatabaseTriggerDefaultLabel {
-  RECORD_IS_CREATED = 'Record is created',
-  RECORD_IS_UPDATED = 'Record is updated',
-  RECORD_IS_DELETED = 'Record is deleted',
-  RECORD_UPSERTED = 'Record is created or updated',
+  RECORD_IS_CREATED = 'Registro criado',
+  RECORD_IS_UPDATED = 'Registro atualizado',
+  RECORD_IS_DELETED = 'Registro excluído',
+  RECORD_UPSERTED = 'Registro criado ou atualizado',
 }
