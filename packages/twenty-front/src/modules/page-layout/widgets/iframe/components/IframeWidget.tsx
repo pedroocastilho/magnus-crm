@@ -127,8 +127,11 @@ export const IframeWidget = ({ widget }: IframeWidgetProps) => {
         title={title}
         onLoad={handleIframeLoad}
         onError={handleIframeError}
-        sandbox="allow-scripts allow-forms allow-popups allow-same-origin"
-        allow="encrypted-media"
+        // Magnus (10/11, Laura): o Ticketz embutido grava audio (microfone, so para o
+        // endereco do proprio iframe), baixa anexos e abre midia em aba normal; sem
+        // isso o navegador recusava a gravacao com "Permission denied"
+        sandbox="allow-scripts allow-forms allow-popups allow-same-origin allow-downloads allow-popups-to-escape-sandbox"
+        allow="encrypted-media; microphone; clipboard-write"
         allowFullScreen
       />
     </StyledContainer>
