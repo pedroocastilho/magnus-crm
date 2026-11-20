@@ -13,6 +13,9 @@ import { RecordBoardCardContext } from '@/object-record/record-board/record-boar
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { DragDropItemSortableCell } from '@/ui/utilities/drag-and-drop/components/DragDropItemSortableCell';
 import { RECORD_BOARD_CARD_DND_TYPE } from '@/object-record/record-board/record-board-dnd/constants/RecordBoardCardDndType';
+import { RecordBoardCardPlaceholder } from '@/object-record/record-board/record-board-card/components/RecordBoardCardPlaceholder';
+import { RecordBoardCardRenderWhenNearViewport } from '@/object-record/record-board/record-board-card/components/RecordBoardCardRenderWhenNearViewport';
+import { useScrollWrapperHTMLElement } from '@/ui/utilities/scroll/hooks/useScrollWrapperHTMLElement';
 
 const StyledDraggableContainer = styled.div<{
   isDragDisabled: boolean;
@@ -55,6 +58,8 @@ export const RecordBoardCardContextProvider = ({
     isRecordBoardDropProcessingComponentState,
   );
 
+  const { scrollWrapperHTMLElement } = useScrollWrapperHTMLElement();
+
   return (
     <RecordBoardCardContext.Provider
       value={{ recordId, isRecordReadOnly, rowIndex, columnIndex }}
@@ -74,7 +79,14 @@ export const RecordBoardCardContextProvider = ({
           data-select-disable
         >
           {isRecordBoardCardFocused && <RecordBoardCardHotkeysEffect />}
-          <RecordBoardCard />
+          {/* Magnus: so monta o cartao quando chega perto da tela */}
+          <RecordBoardCardRenderWhenNearViewport
+            root={scrollWrapperHTMLElement}
+            forceRender={isRecordBoardCardFocused}
+            placeholder={<RecordBoardCardPlaceholder />}
+          >
+            <RecordBoardCard />
+          </RecordBoardCardRenderWhenNearViewport>
         </StyledDraggableContainer>
       </DragDropItemSortableCell>
     </RecordBoardCardContext.Provider>
