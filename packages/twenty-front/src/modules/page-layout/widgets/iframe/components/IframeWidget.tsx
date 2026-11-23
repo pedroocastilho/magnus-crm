@@ -2,6 +2,7 @@ import { useIsPageLayoutInEditMode } from '@/page-layout/hooks/useIsPageLayoutIn
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
 import { PageLayoutWidgetNoDataDisplay } from '@/page-layout/widgets/components/PageLayoutWidgetNoDataDisplay';
 import { WidgetSkeletonLoader } from '@/page-layout/widgets/components/WidgetSkeletonLoader';
+import { getIframeUrlWithPath } from '@/page-layout/widgets/iframe/utils/getIframeUrlWithPath';
 import { styled } from '@linaria/react';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -52,22 +53,6 @@ const StyledErrorContainer = styled.div`
   text-align: center;
 `;
 
-// Magnus: a pagina pode abrir o iframe direto num endereco do mesmo site embutido com ?caminho=/algo
-// (ex.: botao "Chamar no WhatsApp" do card -> /page/<Conversas>?caminho=/abrir/5573...). So caminho
-// relativo ao site configurado no widget: nunca troca o iframe para outro dominio.
-const getUrlWithPath = (baseUrl: string, path: string | null) => {
-  if (!isDefined(path) || !path.startsWith('/') || path.startsWith('//')) {
-    return baseUrl;
-  }
-  try {
-    const base = new URL(baseUrl);
-    const target = new URL(path, base.origin);
-    return target.origin === base.origin ? target.toString() : baseUrl;
-  } catch {
-    return baseUrl;
-  }
-};
-
 export type IframeWidgetProps = {
   widget: PageLayoutWidget;
 };
@@ -100,7 +85,7 @@ export const IframeWidget = ({ widget }: IframeWidgetProps) => {
   const safeUrl = isDefined(url) ? getSafeUrl(url) : undefined;
   const isHttpUrl = isDefined(safeUrl) && /^https?:\/\//i.test(safeUrl);
   const iframeSrc = isHttpUrl
-    ? getUrlWithPath(safeUrl, searchParams.get('caminho'))
+    ? getIframeUrlWithPath(safeUrl, searchParams.get('caminho'))
     : safeUrl;
 
   if (hasError || !isHttpUrl) {
