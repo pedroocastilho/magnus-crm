@@ -9,6 +9,7 @@ import { RecordShowMagnusPurchases } from '@/object-record/record-show/record-sh
 import { RecordShowMagnusTopFields } from '@/object-record/record-show/record-show-magnus/components/RecordShowMagnusTopFields';
 import { useRecordAlerts } from '@/object-record/record-board/record-board-signals/hooks/useRecordAlerts';
 import { useRecordShowSummaryConfig } from '@/object-record/record-show/record-show-magnus/hooks/useRecordShowSummaryConfig';
+import { useEmbeddedSiteUrl } from '@/ui/field/display/hooks/useEmbeddedSiteUrl';
 import { recordStoreFamilyState } from '@/object-record/record-store/states/recordStoreFamilyState';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { styled } from '@linaria/react';
@@ -138,6 +139,15 @@ const RecordShowMagnusPanelContent = ({
     now: openedAt,
   });
 
+  const whatsappFieldName = config?.whatsappFieldMetadataItem?.name;
+  const whatsappUrl: unknown = isDefined(whatsappFieldName)
+    ? recordStore?.[whatsappFieldName]?.primaryLinkUrl
+    : undefined;
+  // 23/11: link da pagina Conversas abre o Ticketz direto numa aba propria
+  const embeddedSiteUrl = useEmbeddedSiteUrl(
+    isNonEmptyString(whatsappUrl) ? whatsappUrl : null,
+  );
+
   if (!isDefined(config) || !isDefined(recordStore)) {
     return null;
   }
@@ -152,10 +162,6 @@ const RecordShowMagnusPanelContent = ({
     config.temperatureFieldMetadataItem,
     config.ownerFieldMetadataItem,
   ].filter(isDefined);
-
-  const whatsappUrl: unknown = read(
-    config.whatsappFieldMetadataItem?.name,
-  )?.primaryLinkUrl;
 
   const nextContact = isDefined(config.nextContactFieldMetadataItem)
     ? getNextContactSignal(read(config.nextContactFieldMetadataItem.name), now)
@@ -194,7 +200,7 @@ const RecordShowMagnusPanelContent = ({
 
       {isNonEmptyString(whatsappUrl) && (
         <StyledWhatsappButton
-          href={whatsappUrl}
+          href={embeddedSiteUrl ?? whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
         >

@@ -8,6 +8,7 @@ import { DropdownMenuItemsContainer } from '@/ui/layout/dropdown/components/Drop
 import { DropdownMenuSectionLabel } from '@/ui/layout/dropdown/components/DropdownMenuSectionLabel';
 import { DropdownMenuSeparator } from '@/ui/layout/dropdown/components/DropdownMenuSeparator';
 import { useCloseDropdown } from '@/ui/layout/dropdown/hooks/useCloseDropdown';
+import { useEmbeddedSiteUrl } from '@/ui/field/display/hooks/useEmbeddedSiteUrl';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
 import { useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
@@ -61,11 +62,15 @@ export const RecordBoardCardQuickActionsMenu = ({
     });
   };
 
+  // 23/11: link da pagina Conversas abre o Ticketz direto numa aba propria
+  const embeddedSiteUrl = useEmbeddedSiteUrl(signals?.whatsappUrl);
+
   const openWhatsapp = () => {
     closeDropdown(dropdownId);
 
-    if (isDefined(signals?.whatsappUrl)) {
-      window.open(signals.whatsappUrl, '_blank', 'noopener,noreferrer');
+    const urlToOpen = embeddedSiteUrl ?? signals?.whatsappUrl;
+    if (isDefined(urlToOpen)) {
+      window.open(urlToOpen, '_blank', 'noopener,noreferrer');
     }
   };
 
