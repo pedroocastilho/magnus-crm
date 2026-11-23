@@ -166,7 +166,7 @@ describe('transformAggregateRawValueIntoAggregateDisplayValue', () => {
         localeCatalog: enUS,
         timeZone: 'UTC',
       }),
-    ).toBe('230.4k');
+    ).toBe('230,4 mil');
   });
 
   it('should return correct number formatted value', () => {
@@ -235,7 +235,7 @@ describe('transformAggregateRawValueIntoAggregateDisplayValue', () => {
         timeZone: 'UTC',
         chartNumberFormat: ChartNumberFormat.SHORT,
       }),
-    ).toBe('230.4k');
+    ).toBe('230,4 mil');
   });
 
   it('should return short number formatted value with SHORT number format', () => {

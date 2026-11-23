@@ -17,8 +17,9 @@ import { RECORD_BOARD_CARD_DND_TYPE } from '@/object-record/record-board/record-
 import { RECORD_BOARD_COLUMN_DND_TYPE } from '@/object-record/record-board/record-board-dnd/constants/RecordBoardColumnDndType';
 import { DND_KIT_COLLISION_PRIORITY } from '@/ui/utilities/drag-and-drop/constants/DndKitCollisionPriority';
 
+// Magnus (Fase A): coluna em superficie propria para o cartao branco se destacar.
 const StyledColumn = styled.div`
-  background-color: ${themeCssVariables.background.primary};
+  background-color: ${themeCssVariables.background.boardColumn};
   display: flex;
   flex-direction: column;
   max-width: var(
@@ -32,6 +33,8 @@ const StyledColumn = styled.div`
   padding: ${themeCssVariables.spacing[2]};
   padding-top: 0px;
   position: relative;
+  // Magnus (Fase B): ponto de encaixe da rolagem no celular (sem efeito sem scroll-snap-type).
+  scroll-snap-align: start;
 `;
 
 type RecordBoardColumnProps = {

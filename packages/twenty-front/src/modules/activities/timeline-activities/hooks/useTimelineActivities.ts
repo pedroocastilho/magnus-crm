@@ -68,6 +68,7 @@ export const useTimelineActivities = (
     loading: loadingTimelineActivities,
     fetchMoreRecords,
     refetch,
+    hasNextPage,
   } = useFindManyRecords<TimelineActivity>({
     skip: !hasTimelineActivityField,
     objectNameSingular: CoreObjectNameSingular.TimelineActivity,
@@ -140,5 +141,6 @@ export const useTimelineActivities = (
     firstQueryLoading,
     loadingMore,
     fetchMoreRecords,
+    hasNextPage,
   };
 };

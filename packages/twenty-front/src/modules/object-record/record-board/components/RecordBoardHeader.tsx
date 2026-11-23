@@ -8,7 +8,8 @@ import { useContext } from 'react';
 const StyledHeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
-  height: 40px;
+  // Magnus (Fase B): altura minima no lugar de fixa, para caber a linha "N parados".
+  min-height: 40px;
   overflow: visible;
 
   width: 100%;

@@ -14,6 +14,7 @@ import {
   type AggregateOperations,
   ChartNumberFormat,
 } from '~/generated-metadata/graphql';
+import { formatCurrencyShort } from '~/utils/format/formatCurrencyShort';
 import { formatNumber } from '~/utils/format/formatNumber';
 import { formatDateString } from '~/utils/string/formatDateString';
 import { formatDateTimeString } from '~/utils/string/formatDateTimeString';
@@ -63,9 +64,13 @@ export const transformAggregateRawValueIntoAggregateDisplayValue = ({
     switch (aggregateFieldMetadataItem.type) {
       case FieldMetadataType.CURRENCY: {
         const amount = Number(aggregateRawValue) / 1_000_000;
+        // Magnus: forma curta em BRL ("R$ 75,6 mil") no lugar do "75.6k".
         return chartNumberFormat === ChartNumberFormat.FULL
           ? formatNumber(amount, { decimals: 2, format: numberFormat })
-          : formatToShortNumber(amount);
+          : formatCurrencyShort(amount, {
+              currencyCode:
+                aggregateFieldMetadataItem.defaultValue?.currencyCode,
+            });
       }
 
       case FieldMetadataType.NUMBER: {

@@ -14,4 +14,6 @@ export const FONT_COMMON = {
     semiBold: 600,
   },
   family: 'Inter, sans-serif',
+  // Magnus (Fase A): Archivo so em titulos de pagina e numeros (totais, paineis), com Inter de reserva.
+  familyNumeric: "'Archivo Variable', Inter, sans-serif",
 };

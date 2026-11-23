@@ -13,6 +13,10 @@ import { RecordBoardCardCellHoveredPortal } from '@/object-record/record-board/r
 import { RecordBoardCardBody } from '@/object-record/record-board/record-board-card/components/RecordBoardCardBody';
 import { RecordBoardCardHeader } from '@/object-record/record-board/record-board-card/components/RecordBoardCardHeader';
 import { RecordBoardCardMultiDragStack } from '@/object-record/record-board/record-board-card/components/RecordBoardCardMultiDragStack';
+import { RecordBoardCardFooter } from '@/object-record/record-board/record-board-signals/components/RecordBoardCardFooter';
+import { RecordBoardCardStripe } from '@/object-record/record-board/record-board-signals/components/RecordBoardCardStripe';
+import { RecordBoardCardSignalsContext } from '@/object-record/record-board/record-board-signals/contexts/RecordBoardCardSignalsContext';
+import { useRecordBoardCardSignals } from '@/object-record/record-board/record-board-signals/hooks/useRecordBoardCardSignals';
 import { RECORD_BOARD_CARD_CLICK_OUTSIDE_ID } from '@/object-record/record-board/record-board-card/constants/RecordBoardCardClickOutsideId';
 import { RECORD_BOARD_CARD_INPUT_ID_PREFIX } from '@/object-record/record-board/record-board-card/constants/RecordBoardCardInputIdPrefix';
 import { RecordBoardCardComponentInstanceContext } from '@/object-record/record-board/record-board-card/states/contexts/RecordBoardCardComponentInstanceContext';
@@ -156,6 +160,9 @@ export const RecordBoardCard = () => {
     }
   }, 800);
 
+  // Magnus (Fase B): sinais do cartao (traco, selo, rodape); null sem configuracao do quadro.
+  const recordBoardCardSignals = useRecordBoardCardSignals(recordId);
+
   const isDraggingThisCard =
     !isDragOverlay &&
     (isRecordIdPrimaryDragMultiple ||
@@ -168,47 +175,58 @@ export const RecordBoardCard = () => {
         instanceId: `record-board-card-${recordId}`,
       }}
     >
-      <RecordFieldsScopeContextProvider
-        value={{ scopeInstanceId: RECORD_BOARD_CARD_INPUT_ID_PREFIX }}
-      >
-        <StyledBoardCardWrapper
-          data-click-outside-id={RECORD_BOARD_CARD_CLICK_OUTSIDE_ID}
-          onContextMenu={handleContextMenuOpen}
-          onPointerCancel={handlePointerCancel}
-          onPointerDown={handlePointerDown}
-          onPointerUp={handlePointerUp}
+      <RecordBoardCardSignalsContext.Provider value={recordBoardCardSignals}>
+        <RecordFieldsScopeContextProvider
+          value={{ scopeInstanceId: RECORD_BOARD_CARD_INPUT_ID_PREFIX }}
         >
-          <StyledCardContainer
-            isPrimaryMultiDrag={isDragOverlay && isRecordIdPrimaryDragMultiple}
+          <StyledBoardCardWrapper
+            data-click-outside-id={RECORD_BOARD_CARD_CLICK_OUTSIDE_ID}
+            onContextMenu={handleContextMenuOpen}
+            onPointerCancel={handlePointerCancel}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
           >
-            {isDragOverlay && isRecordIdPrimaryDragMultiple && (
-              <RecordBoardCardMultiDragStack />
-            )}
-            <RecordCard
-              data-selected={isRecordBoardCardSelected}
-              data-focused={isRecordBoardCardFocused}
-              data-active={isRecordBoardCardActive}
-              onMouseLeave={onMouseLeaveBoard}
-              onClick={handleCardClick}
-              isDragging={isDraggingThisCard}
+            <StyledCardContainer
+              isPrimaryMultiDrag={
+                isDragOverlay && isRecordIdPrimaryDragMultiple
+              }
             >
-              <RecordBoardCardHeader />
-              <AnimatedEaseInOut
-                isOpen={recordBoardCardIsExpanded || !isCompactModeActive}
-                initial={false}
+              {isDragOverlay && isRecordIdPrimaryDragMultiple && (
+                <RecordBoardCardMultiDragStack />
+              )}
+              <RecordCard
+                data-selected={isRecordBoardCardSelected}
+                data-focused={isRecordBoardCardFocused}
+                data-active={isRecordBoardCardActive}
+                data-stale={
+                  recordBoardCardSignals?.staleLevel === 'stale'
+                    ? 'true'
+                    : undefined
+                }
+                onMouseLeave={onMouseLeaveBoard}
+                onClick={handleCardClick}
+                isDragging={isDraggingThisCard}
               >
-                <RecordBoardCardBody />
-              </AnimatedEaseInOut>
-            </RecordCard>
-          </StyledCardContainer>
-          {!isDragOverlay && (
-            <>
-              <RecordBoardCardCellHoveredPortal />
-              <RecordBoardCardCellEditModePortal />
-            </>
-          )}
-        </StyledBoardCardWrapper>
-      </RecordFieldsScopeContextProvider>
+                <RecordBoardCardStripe />
+                <RecordBoardCardHeader />
+                <AnimatedEaseInOut
+                  isOpen={recordBoardCardIsExpanded || !isCompactModeActive}
+                  initial={false}
+                >
+                  <RecordBoardCardBody />
+                </AnimatedEaseInOut>
+                <RecordBoardCardFooter />
+              </RecordCard>
+            </StyledCardContainer>
+            {!isDragOverlay && (
+              <>
+                <RecordBoardCardCellHoveredPortal />
+                <RecordBoardCardCellEditModePortal />
+              </>
+            )}
+          </StyledBoardCardWrapper>
+        </RecordFieldsScopeContextProvider>
+      </RecordBoardCardSignalsContext.Provider>
     </RecordBoardCardComponentInstanceContext.Provider>
   );
 };

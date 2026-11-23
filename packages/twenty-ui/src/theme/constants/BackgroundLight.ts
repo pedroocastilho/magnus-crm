@@ -32,4 +32,7 @@ export const BACKGROUND_LIGHT = {
   radialGradientHover: `radial-gradient(76.32% 95.59% at 50% 0%, ${GRAY_SCALE_LIGHT.gray10} 0%, ${GRAY_SCALE_LIGHT.gray11} 100%)`,
   primaryInverted: GRAY_SCALE_LIGHT.gray12,
   primaryInvertedHover: GRAY_SCALE_LIGHT.gray11,
+  // Magnus (Fase A): coluna do quadro levemente rosada e cartao branco por cima.
+  boardColumn: GRAY_SCALE_LIGHT.gray3,
+  boardCard: GRAY_SCALE_LIGHT.gray1,
 };

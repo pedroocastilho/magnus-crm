@@ -52,6 +52,7 @@ export const TimelineCard = () => {
     firstQueryLoading,
     loadingMore,
     fetchMoreRecords,
+    hasNextPage,
   } = useTimelineActivities(targetRecord);
 
   const isTimelineActivitiesEmpty = timelineActivities.length === 0;
@@ -90,6 +91,7 @@ export const TimelineCard = () => {
         targetableObject={targetRecord}
         title={t`All`}
         events={timelineActivities ?? []}
+        isTimelineComplete={!hasNextPage}
       />
       <CustomResolverFetchMoreLoader
         loading={loadingMore}

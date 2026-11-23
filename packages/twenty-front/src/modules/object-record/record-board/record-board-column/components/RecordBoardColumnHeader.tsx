@@ -12,6 +12,8 @@ import { RECORD_BOARD_COLUMN_WIDTH } from '@/object-record/record-board/constant
 import { RECORD_BOARD_COLUMN_WIDTH_CSS_VARIABLE_NAME } from '@/object-record/record-board/constants/RecordBoardColumnWidthCssVariableName';
 import { RecordBoardColumnResizeHandler } from '@/object-record/record-board/record-board-column/components/RecordBoardColumnResizeHandler';
 import { RecordBoardColumnContext } from '@/object-record/record-board/record-board-column/contexts/RecordBoardColumnContext';
+import { RecordBoardColumnHeaderTotal } from '@/object-record/record-board/record-board-signals/components/RecordBoardColumnHeaderTotal';
+import { RecordBoardColumnSummaryLine } from '@/object-record/record-board/record-board-signals/components/RecordBoardColumnSummaryLine';
 import { hasAnySoftDeleteFilterOnViewComponentSelector } from '@/object-record/record-filter/states/hasAnySoftDeleteFilterOnView';
 import { RecordGroupChip } from '@/object-record/record-group/components/RecordGroupChip';
 import { getFieldMetadataItemGqlFieldName } from '@/object-metadata/utils/getFieldMetadataItemGqlFieldName';
@@ -71,7 +73,7 @@ const StyledHeaderActions = styled.div`
 `;
 
 const StyledHeaderContainer = styled.div`
-  background: ${themeCssVariables.background.primary};
+  background: ${themeCssVariables.background.boardColumn};
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -84,7 +86,7 @@ const StyledLeftContainer = styled.div`
 `;
 
 const StyledColumn = styled.div`
-  background-color: ${themeCssVariables.background.primary};
+  background-color: ${themeCssVariables.background.boardColumn};
   display: flex;
   flex-direction: column;
   max-width: var(
@@ -100,8 +102,10 @@ const StyledColumn = styled.div`
 
   position: relative;
 
+  // Magnus (Fase A): mesmo vao de 8px do corpo, para o cabecalho alinhar com a coluna.
   &[data-has-left-border='true'] {
-    border-left: 1px solid ${themeCssVariables.border.color.light};
+    border-left: ${themeCssVariables.spacing[2]} solid
+      ${themeCssVariables.background.primary};
   }
 `;
 
@@ -195,7 +199,10 @@ export const RecordBoardColumnHeader = () => {
   };
 
   return (
-    <StyledColumn data-has-left-border={columnIndex > 0 ? 'true' : undefined}>
+    <StyledColumn
+      data-has-left-border={columnIndex > 0 ? 'true' : undefined}
+      data-board-column-index={columnIndex}
+    >
       <DragDropItemSortableHandle fill>
         <StyledHeader
           onPointerCancel={handlePointerCancel}
@@ -210,6 +217,7 @@ export const RecordBoardColumnHeader = () => {
                     <RecordGroupChip
                       recordGroupDefinition={columnDefinition}
                       fieldMetadataItem={selectFieldMetadataItem}
+                      valueTagWeight="medium"
                     />
                   </StyledTagContainer>
                 ) : (
@@ -225,6 +233,7 @@ export const RecordBoardColumnHeader = () => {
                         <RecordGroupChip
                           recordGroupDefinition={columnDefinition}
                           fieldMetadataItem={selectFieldMetadataItem}
+                          valueTagWeight="medium"
                         />
                       </StyledTagContainer>
                     }
@@ -245,6 +254,7 @@ export const RecordBoardColumnHeader = () => {
                 />
               </StyledAggregateDropdownContainer>
             </StyledLeftContainer>
+            <RecordBoardColumnHeaderTotal />
             {!isRecordBoardViewSettingsReadOnly && (
               <StyledHeaderActions
                 data-dropdown-open={isDropdownOpen ? 'true' : undefined}
@@ -272,6 +282,7 @@ export const RecordBoardColumnHeader = () => {
           </StyledHeaderContainer>
         </StyledHeader>
       </DragDropItemSortableHandle>
+      <RecordBoardColumnSummaryLine />
       {!isRecordBoardViewSettingsReadOnly && <RecordBoardColumnResizeHandler />}
     </StyledColumn>
   );

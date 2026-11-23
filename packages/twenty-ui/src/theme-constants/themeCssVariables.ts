@@ -153,6 +153,8 @@ export const themeCssVariables = {
     radialGradientHover: 'var(--t-background-radial-gradient-hover)',
     primaryInverted: 'var(--t-background-primary-inverted)',
     primaryInvertedHover: 'var(--t-background-primary-inverted-hover)',
+    boardColumn: 'var(--t-background-board-column)',
+    boardCard: 'var(--t-background-board-card)',
   },
   blur: {
     light: 'var(--t-blur-light)',
@@ -189,6 +191,9 @@ export const themeCssVariables = {
     strong: 'var(--t-box-shadow-strong)',
     underline: 'var(--t-box-shadow-underline)',
     superHeavy: 'var(--t-box-shadow-super-heavy)',
+    card: 'var(--t-box-shadow-card)',
+    cardHover: 'var(--t-box-shadow-card-hover)',
+    cardDragging: 'var(--t-box-shadow-card-dragging)',
   },
   font: {
     color: {
@@ -215,6 +220,7 @@ export const themeCssVariables = {
       semiBold: 'var(--t-font-weight-semi-bold)',
     },
     family: 'var(--t-font-family)',
+    familyNumeric: 'var(--t-font-family-numeric)',
   },
   name: 'var(--t-name)',
   snackBar: {

@@ -14,6 +14,16 @@ import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/Enriche
 import { getObjectRecordIdentifier } from '@/object-metadata/utils/getObjectRecordIdentifier';
 import { recordStoreFamilyState } from '@/object-record/record-store/states/recordStoreFamilyState';
 import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import { type TimelineEventCategory } from '@/activities/timeline-activities/utils/getTimelineEventCategory';
+import { isDefined } from 'twenty-shared/utils';
+import {
+  IconBrandWhatsapp,
+  IconCheckbox,
+  type IconComponent,
+  IconMail,
+  IconNotes,
+  IconProgressCheck,
+} from 'twenty-ui/icon';
 import { themeCssVariables } from 'twenty-ui/theme-constants';
 import { dateLocaleState } from '~/localization/states/dateLocaleState';
 import { beautifyPastDateRelativeToNow } from '~/utils/date-utils';
@@ -35,18 +45,53 @@ const StyledLeftContainer = styled.div`
   flex-direction: column;
 `;
 
+// Magnus (Fase D): icone com cor por tipo (etapa, nota, WhatsApp, tarefa, e-mail); o resto fica cinza.
 const StyledIconContainer = styled.div`
   align-items: center;
+  border-radius: ${themeCssVariables.border.radius.sm};
   color: ${themeCssVariables.font.color.tertiary};
   display: flex;
-  height: 16px;
+  height: 20px;
   justify-content: center;
-  margin: 5px;
+  margin: 3px;
   text-decoration-line: underline;
   user-select: none;
-  width: 16px;
+  width: 20px;
   z-index: 2;
+
+  &[data-category='stage'] {
+    background: ${themeCssVariables.accent.accent3};
+    color: ${themeCssVariables.accent.accent11};
+  }
+
+  &[data-category='note'] {
+    background: ${themeCssVariables.color.amber3};
+    color: ${themeCssVariables.color.amber11};
+  }
+
+  &[data-category='whatsapp'] {
+    background: ${themeCssVariables.color.green3};
+    color: ${themeCssVariables.color.green11};
+  }
+
+  &[data-category='task'] {
+    background: ${themeCssVariables.color.blue3};
+    color: ${themeCssVariables.color.blue11};
+  }
+
+  &[data-category='email'] {
+    background: ${themeCssVariables.color.purple3};
+    color: ${themeCssVariables.color.purple11};
+  }
 `;
+
+const CATEGORY_ICONS: Partial<Record<TimelineEventCategory, IconComponent>> = {
+  stage: IconProgressCheck,
+  note: IconNotes,
+  whatsapp: IconBrandWhatsapp,
+  task: IconCheckbox,
+  email: IconMail,
+};
 
 const StyledVerticalLineContainer = styled.div`
   display: flex;
@@ -66,6 +111,11 @@ const StyledSummary = styled.summary`
   width: 100%;
 `;
 
+const StyledRepeatCount = styled.span`
+  color: ${themeCssVariables.font.color.tertiary};
+  font-size: ${themeCssVariables.font.size.xs};
+`;
+
 const StyledItemContainer = styled.div<{ isMarginBottom?: boolean }>`
   align-items: flex-start;
   display: flex;
@@ -82,12 +132,17 @@ type EventRowProps = {
   mainObjectMetadataItem: EnrichedObjectMetadataItem | null;
   isLastEvent?: boolean;
   event: TimelineActivity;
+  category?: TimelineEventCategory;
+  // Magnus (Fase D): edicoes iguais seguidas que viraram esta linha (collapseRepeatedTimelineEvents)
+  repeatCount?: number;
 };
 
 export const EventRow = ({
   isLastEvent,
   event,
   mainObjectMetadataItem,
+  category = 'other',
+  repeatCount = 1,
 }: EventRowProps) => {
   const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
 
@@ -135,15 +190,21 @@ export const EventRow = ({
     throw new Error('mainObjectMetadataItem is required');
   }
 
+  const CategoryIcon = CATEGORY_ICONS[category];
+
   return (
     <>
       <StyledTimelineItemContainer>
         <StyledLeftContainer>
-          <StyledIconContainer>
-            <EventIconDynamicComponent
-              event={event}
-              linkedObjectMetadataItem={linkedObjectMetadataItem}
-            />
+          <StyledIconContainer data-category={category}>
+            {isDefined(CategoryIcon) ? (
+              <CategoryIcon size={14} stroke={1.8} />
+            ) : (
+              <EventIconDynamicComponent
+                event={event}
+                linkedObjectMetadataItem={linkedObjectMetadataItem}
+              />
+            )}
           </StyledIconContainer>
           {!isLastEvent && (
             <StyledVerticalLineContainer>
@@ -162,6 +223,9 @@ export const EventRow = ({
               createdAt={beautifiedCreatedAt}
             />
           </StyledSummary>
+          {repeatCount > 1 && (
+            <StyledRepeatCount>{repeatCount} vezes neste dia</StyledRepeatCount>
+          )}
         </StyledItemContainer>
       </StyledTimelineItemContainer>
     </>

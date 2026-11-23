@@ -29,9 +29,11 @@ export const useLinkedObjectsTitle = (linkedObjectIds: string[]) => {
             },
           },
         },
+        // Magnus (Fase D): o texto da nota aparece em citacao na linha do tempo.
         fields: {
           id: true,
           title: true,
+          bodyV2: true,
         },
       },
     ],

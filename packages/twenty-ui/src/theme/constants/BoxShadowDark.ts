@@ -12,6 +12,10 @@ export const BOX_SHADOW_DARK = {
     0.16,
   )}, 0px 2px 4px 0px ${RGBA('#000000', 0.08)}`,
   underline: `0px 1px 0px 0px ${RGBA('#000000', 0.32)}`,
+  // Magnus (Fase A): no escuro o cartao nao tem sombra; so o arrastar ganha uma.
+  card: 'none',
+  cardHover: 'none',
+  cardDragging: `0px 12px 24px -6px ${RGBA('#000000', 0.5)}`,
   superHeavy: `2px 4px 16px 0px ${RGBA(
     '#000000',
     0.12,

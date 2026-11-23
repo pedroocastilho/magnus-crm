@@ -17,7 +17,7 @@ import { ThemeContext, themeCssVariables } from 'twenty-ui/theme-constants';
 const StyledNewButton = styled.button`
   align-items: center;
   align-self: baseline;
-  background-color: ${themeCssVariables.background.primary};
+  background-color: transparent;
   border: none;
   border-radius: ${themeCssVariables.border.radius.sm};
   color: ${themeCssVariables.font.color.tertiary};

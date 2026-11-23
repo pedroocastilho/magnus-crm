@@ -49,11 +49,14 @@ const StyledLeftContainer = styled.div`
   }
 `;
 
+// Magnus (Fase A): titulo da pagina em Archivo 600, um pouco maior, para dar peso sem mudar a altura da barra.
 const StyledTitleContainer = styled.div`
   align-items: center;
   display: flex;
-  font-size: ${themeCssVariables.font.size.md};
-  font-weight: ${themeCssVariables.font.weight.medium};
+  font-family: ${themeCssVariables.font.familyNumeric};
+  font-size: ${themeCssVariables.font.size.lg};
+  font-weight: ${themeCssVariables.font.weight.semiBold};
+  letter-spacing: -0.01em;
   margin-right: ${themeCssVariables.spacing[1]};
   overflow: hidden;
   width: 100%;

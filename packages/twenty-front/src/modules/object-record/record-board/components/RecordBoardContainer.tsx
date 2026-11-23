@@ -7,6 +7,10 @@ import { RecordBoard } from '@/object-record/record-board/components/RecordBoard
 import { RecordBoardBodyEscapeHotkeyEffect } from '@/object-record/record-board/components/RecordBoardBodyEscapeHotkeyEffect';
 import { RecordBoardHotkeyEffect } from '@/object-record/record-board/components/RecordBoardHotkeyEffect';
 import { RecordBoardContext } from '@/object-record/record-board/contexts/RecordBoardContext';
+import { RecordBoardSignalsConfigLoader } from '@/object-record/record-board/record-board-signals/components/RecordBoardSignalsConfigLoader';
+import { RecordBoardSignalsContext } from '@/object-record/record-board/record-board-signals/contexts/RecordBoardSignalsContext';
+import { useRecordBoardColumnSummaries } from '@/object-record/record-board/record-board-signals/hooks/useRecordBoardColumnSummaries';
+import { useRecordBoardSignalsConfig } from '@/object-record/record-board/record-board-signals/hooks/useRecordBoardSignalsConfig';
 import { RecordBoardComponentInstanceContext } from '@/object-record/record-board/states/contexts/RecordBoardComponentInstanceContext';
 import { recordIndexGroupFieldMetadataItemComponentState } from '@/object-record/record-index/states/recordIndexGroupFieldMetadataComponentState';
 
@@ -15,6 +19,7 @@ import { RECORD_INDEX_REMOVE_SORTING_MODAL_ID } from '@/object-record/record-ind
 
 import { isModalOpenedComponentState } from '@/ui/layout/modal/states/isModalOpenedComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
+import { useMemo, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 
 type RecordBoardContainerProps = {
@@ -55,6 +60,25 @@ export const RecordBoardContainer = ({
       ...args,
     });
 
+  // Magnus (Fase B): sinais do quadro (traco, selo, rodape) calculados uma vez por quadro.
+  const recordBoardSignalsConfig =
+    useRecordBoardSignalsConfig(objectMetadataItem);
+
+  // "Agora" fixo ao abrir o quadro: selo dos cartoes e contagem de parados usam a mesma referencia.
+  const [now] = useState(() => new Date());
+
+  const columnSummaries = useRecordBoardColumnSummaries({
+    objectMetadataItem,
+    groupByFieldMetadataItem: recordIndexGroupFieldMetadataItem,
+    config: recordBoardSignalsConfig,
+    now,
+  });
+
+  const recordBoardSignalsValue = useMemo(
+    () => ({ config: recordBoardSignalsConfig, now, columnSummaries }),
+    [recordBoardSignalsConfig, now, columnSummaries],
+  );
+
   const isModalOpened = useAtomComponentStateValue(
     isModalOpenedComponentState,
     RECORD_INDEX_REMOVE_SORTING_MODAL_ID,
@@ -79,7 +103,10 @@ export const RecordBoardContainer = ({
       <RecordBoardComponentInstanceContext.Provider
         value={{ instanceId: recordBoardId }}
       >
-        <RecordBoard />
+        <RecordBoardSignalsContext.Provider value={recordBoardSignalsValue}>
+          <RecordBoard />
+        </RecordBoardSignalsContext.Provider>
+        <RecordBoardSignalsConfigLoader />
         {isModalOpened && <RecordIndexRemoveSortingModal />}
         <RecordBoardHotkeyEffect />
         <RecordBoardBodyEscapeHotkeyEffect />

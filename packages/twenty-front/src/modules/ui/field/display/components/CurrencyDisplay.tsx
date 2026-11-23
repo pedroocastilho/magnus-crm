@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { styled } from '@linaria/react';
 import { AppTooltip, TooltipDelay, TooltipPosition } from 'twenty-ui/surfaces';
 import { ThemeContext } from 'twenty-ui/theme-constants';
-import { isDefined, formatToShortNumber } from 'twenty-shared/utils';
+import { isDefined } from 'twenty-shared/utils';
 
 import { useNumberFormat } from '@/localization/hooks/useNumberFormat';
 import { type FieldDefinition } from '@/object-record/record-field/ui/types/FieldDefinition';
@@ -13,6 +13,7 @@ import {
 } from '@/object-record/record-field/ui/types/FieldMetadata';
 import { SETTINGS_FIELD_CURRENCY_CODES } from '@/settings/data-model/constants/SettingsFieldCurrencyCodes';
 import { EllipsisDisplay } from '@/ui/field/display/components/EllipsisDisplay';
+import { formatCurrencyShort } from '~/utils/format/formatCurrencyShort';
 import { DEFAULT_DECIMAL_VALUE } from '~/utils/format/formatNumber';
 import { isUndefinedOrNull } from '~/utils/isUndefinedOrNull';
 
@@ -78,7 +79,11 @@ export const CurrencyDisplay = ({
         )}
         {amountToDisplay !== null
           ? !isDefined(format) || format === 'short'
-            ? formatToShortNumber(amountToDisplay)
+            ? // Magnus: forma curta pt-BR; o simbolo ja vem no icone ao lado.
+              formatCurrencyShort(amountToDisplay, {
+                currencyCode,
+                withSymbol: !isDefined(CurrencyIcon),
+              })
             : formatNumber(amountToDisplay, { decimals: decimalsToUse })
           : null}
       </EllipsisDisplay>

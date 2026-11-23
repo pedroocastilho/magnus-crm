@@ -12,8 +12,10 @@ const StyledColumnContainer = styled.div`
   display: flex;
   flex: 1;
 
+  // Magnus (Fase A): vao de 8px na cor do fundo no lugar da linha entre colunas.
   & > *:not(:first-of-type) {
-    border-left: 1px solid ${themeCssVariables.border.color.light};
+    border-left: ${themeCssVariables.spacing[2]} solid
+      ${themeCssVariables.background.primary};
   }
 `;
 

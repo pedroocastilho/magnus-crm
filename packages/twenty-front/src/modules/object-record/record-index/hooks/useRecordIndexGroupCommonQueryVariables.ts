@@ -1,6 +1,8 @@
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { flattenedFieldMetadataItemsSelector } from '@/object-metadata/states/flattenedFieldMetadataItemsSelector';
 import { turnSortsIntoOrderBy } from '@/object-record/object-sort-dropdown/utils/turnSortsIntoOrderBy';
+import { useRecordBoardSignalsConfig } from '@/object-record/record-board/record-board-signals/hooks/useRecordBoardSignalsConfig';
+import { getRecordBoardSignalsFieldMetadataIds } from '@/object-record/record-board/record-board-signals/utils/resolveRecordBoardSignalsConfig';
 import { useRelevantRecordsGqlFields } from '@/object-record/record-field/hooks/useRelevantRecordsGqlFields';
 import { currentRecordFilterGroupsComponentState } from '@/object-record/record-filter-group/states/currentRecordFilterGroupsComponentState';
 import { useFilterValueDependencies } from '@/object-record/record-filter/hooks/useFilterValueDependencies';
@@ -69,9 +71,16 @@ export const useRecordIndexGroupCommonQueryVariables = () => {
     recordIndexGroupFieldMetadataItemComponentState,
   );
 
+  // Magnus (Fase B): campos dos sinais do quadro vem na consulta mesmo quando nao estao visiveis.
+  const recordBoardSignalsConfig =
+    useRecordBoardSignalsConfig(objectMetadataItem);
+
   const recordGqlFields = useRelevantRecordsGqlFields({
     objectMetadataItem,
-    additionalFieldMetadataIds: [recordIndexGroupFieldMetadataItem?.id],
+    additionalFieldMetadataIds: [
+      recordIndexGroupFieldMetadataItem?.id,
+      ...getRecordBoardSignalsFieldMetadataIds(recordBoardSignalsConfig),
+    ],
   });
 
   const recordGroupDefinitions = useAtomComponentSelectorValue(

@@ -7,6 +7,7 @@ import { RecordChip } from '@/object-record/components/RecordChip';
 import { useActiveRecordBoardCard } from '@/object-record/record-board/hooks/useActiveRecordBoardCard';
 import { useFocusedRecordBoardCard } from '@/object-record/record-board/hooks/useFocusedRecordBoardCard';
 import { StopPropagationContainer } from '@/object-record/record-board/record-board-card/components/StopPropagationContainer';
+import { RecordBoardCardStaleBadge } from '@/object-record/record-board/record-board-signals/components/RecordBoardCardStaleBadge';
 import { recordBoardCardIsExpandedComponentState } from '@/object-record/record-board/record-board-card/states/recordBoardCardIsExpandedComponentState';
 import { RecordCardHeaderContainer } from '@/object-record/record-card/components/RecordCardHeaderContainer';
 import { useOpenRecordFromIndexView } from '@/object-record/record-index/hooks/useOpenRecordFromIndexView';
@@ -99,6 +100,7 @@ export const RecordBoardCardHeader = () => {
           )}
         </StopPropagationContainer>
       </StyledRecordChipContainer>
+      <RecordBoardCardStaleBadge />
 
       {isCompactModeActive && (
         <StyledCompactIconContainer className="compact-icon-container">

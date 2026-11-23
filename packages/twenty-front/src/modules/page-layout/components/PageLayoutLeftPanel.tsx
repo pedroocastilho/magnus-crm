@@ -1,4 +1,5 @@
 import { SummaryCard } from '@/object-record/record-show/components/SummaryCard';
+import { RecordShowMagnusPanel } from '@/object-record/record-show/record-show-magnus/components/RecordShowMagnusPanel';
 import { PageLayoutContent } from '@/page-layout/components/PageLayoutContent';
 import { PageLayoutContentProvider } from '@/page-layout/contexts/PageLayoutContentContext';
 import { useCurrentPageLayout } from '@/page-layout/hooks/useCurrentPageLayout';
@@ -66,6 +67,11 @@ export const PageLayoutLeftPanel = ({
           defaultEnableXScroll={false}
           defaultEnableYScroll={true}
         >
+          {/* Magnus (Fase D): topo e resumo da ficha logo abaixo do nome, rolando junto com os campos. */}
+          <RecordShowMagnusPanel
+            objectNameSingular={targetRecordIdentifier.targetObjectNameSingular}
+            objectRecordId={targetRecordIdentifier.id}
+          />
           <PageLayoutContent />
         </ScrollWrapper>
       </PageLayoutContentProvider>

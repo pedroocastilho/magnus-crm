@@ -1,14 +1,17 @@
 import { styled } from '@linaria/react';
 
 import { EventRow } from '@/activities/timeline-activities/components/EventRow';
-import { type EventGroup } from '@/activities/timeline-activities/utils/groupEventsByMonth';
+import { type TimelineActivity } from '@/activities/timeline-activities/types/TimelineActivity';
+import { collapseRepeatedTimelineEvents } from '@/activities/timeline-activities/utils/collapseRepeatedTimelineEvents';
+import { type TimelineEventCategory } from '@/activities/timeline-activities/utils/getTimelineEventCategory';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { themeCssVariables } from 'twenty-ui/theme-constants';
 
+// Magnus (Fase D): um grupo por dia ("Hoje", "Ontem", "18 de nov") no lugar do grupo por mes.
 type EventsGroupProps = {
-  group: EventGroup;
-  month: string;
-  year?: number;
+  label: string;
+  items: TimelineActivity[];
+  categoryByEventId: Map<string, TimelineEventCategory>;
   mainObjectMetadataItem: EnrichedObjectMetadataItem | null;
 };
 
@@ -58,25 +61,32 @@ const StyledMonthSeperatorLine = styled.div`
 `;
 
 export const EventsGroup = ({
-  group,
-  month,
-  year,
+  label,
+  items,
+  categoryByEventId,
   mainObjectMetadataItem,
 }: EventsGroupProps) => {
+  const collapsedItems = collapseRepeatedTimelineEvents(
+    items,
+    categoryByEventId,
+  );
+
   return (
     <StyledActivityGroup>
       <StyledMonthSeperator>
-        {month} {year}
+        {label}
         <StyledMonthSeperatorLine />
       </StyledMonthSeperator>
       <StyledActivityGroupContainer>
         <StyledActivityGroupBar />
-        {group.items.map((event, index) => (
+        {collapsedItems.map(({ event, repeatCount }, index) => (
           <EventRow
             mainObjectMetadataItem={mainObjectMetadataItem}
-            key={index}
+            key={event.id}
             event={event}
-            isLastEvent={index === group.items.length - 1}
+            category={categoryByEventId.get(event.id) ?? 'other'}
+            repeatCount={repeatCount}
+            isLastEvent={index === collapsedItems.length - 1}
           />
         ))}
       </StyledActivityGroupContainer>

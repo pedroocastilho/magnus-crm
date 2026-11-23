@@ -1,3 +1,4 @@
+import { RecordShowMagnusPanel } from '@/object-record/record-show/record-show-magnus/components/RecordShowMagnusPanel';
 import { PageLayoutWidgetDndProvider } from '@/page-layout/components/dnd/PageLayoutWidgetDndProvider';
 import { PageLayoutLeftPanel } from '@/page-layout/components/PageLayoutLeftPanel';
 import { PageLayoutTabList } from '@/page-layout/components/PageLayoutTabList';
@@ -17,6 +18,7 @@ import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTab
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { styled } from '@linaria/react';
+import { PageLayoutType } from '~/generated-metadata/graphql';
 import { isDefined } from 'twenty-shared/utils';
 
 const StyledContainer = styled.div<{ hasPinnedTab: boolean }>`
@@ -97,6 +99,12 @@ export const PageLayoutTabsRenderer = () => {
     (tab) => tab.id === activeTabId,
   );
 
+  const shouldShowMagnusPanelOnTop =
+    !isDefined(pinnedLeftTab) &&
+    currentPageLayout.type === PageLayoutType.RECORD_PAGE &&
+    isDefined(activeTabId) &&
+    activeTabId === sortedTabs.at(0)?.id;
+
   return (
     <PageLayoutWidgetDndProvider>
       <StyledContainer hasPinnedTab={isDefined(pinnedLeftTab)}>
@@ -134,6 +142,16 @@ export const PageLayoutTabsRenderer = () => {
               )}
               defaultEnableXScroll={false}
             >
+              {/* Magnus (Fase D): sem o painel da esquerda (celular e painel lateral), o topo da ficha abre a primeira aba. */}
+              {shouldShowMagnusPanelOnTop &&
+                isDefined(targetRecordIdentifier) && (
+                  <RecordShowMagnusPanel
+                    objectNameSingular={
+                      targetRecordIdentifier.targetObjectNameSingular
+                    }
+                    objectRecordId={targetRecordIdentifier.id}
+                  />
+                )}
               {isDefined(activeTabId) && activeTabExistsInCurrentPageLayout && (
                 <PageLayoutMainContent tabId={activeTabId} />
               )}
