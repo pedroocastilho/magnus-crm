@@ -254,7 +254,6 @@ export const RecordBoardColumnHeader = () => {
                 />
               </StyledAggregateDropdownContainer>
             </StyledLeftContainer>
-            <RecordBoardColumnHeaderTotal />
             {!isRecordBoardViewSettingsReadOnly && (
               <StyledHeaderActions
                 data-dropdown-open={isDropdownOpen ? 'true' : undefined}
@@ -282,6 +281,8 @@ export const RecordBoardColumnHeader = () => {
           </StyledHeaderContainer>
         </StyledHeader>
       </DragDropItemSortableHandle>
+      {/* Magnus (23/11): total na linha de baixo, para o nome da etapa nao ficar cortado em quadro com muitas colunas */}
+      <RecordBoardColumnHeaderTotal />
       <RecordBoardColumnSummaryLine />
       {!isRecordBoardViewSettingsReadOnly && <RecordBoardColumnResizeHandler />}
     </StyledColumn>

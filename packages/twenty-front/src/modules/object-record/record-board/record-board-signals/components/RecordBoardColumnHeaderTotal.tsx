@@ -16,8 +16,7 @@ const StyledTotal = styled.div`
   flex-shrink: 0;
   font-feature-settings: 'tnum';
   gap: ${themeCssVariables.spacing[1]};
-  margin-left: auto;
-  padding-left: ${themeCssVariables.spacing[2]};
+  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[1]} 0;
   white-space: nowrap;
 `;
 
@@ -45,7 +44,7 @@ const getDefaultCurrencyCode = (defaultValue: unknown): string | null => {
   return typeof currencyCode === 'string' ? currencyCode : null;
 };
 
-// Magnus (Fase B): total em R$ da coluna, a direita do chip da etapa.
+// Magnus (Fase B): total em R$ da coluna, na linha logo abaixo do chip da etapa (23/11: antes ficava ao lado e cortava o nome).
 // A quantidade so entra aqui quando o total escolhido na visao nao e a contagem, e o valor
 // so quando a visao nao soma o mesmo campo (para nao repetir nenhum dos dois).
 export const RecordBoardColumnHeaderTotal = () => {
