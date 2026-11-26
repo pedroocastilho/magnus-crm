@@ -98,7 +98,12 @@ export const useFieldListFieldMetadataItems = ({
   const allInlineFieldMetadataItems = [
     ...(inlineFieldMetadataItems ?? []),
     ...inlineRelationFields,
-  ].sort((a, b) => a.name.localeCompare(b.name));
+  ].sort(
+    // Magnus (2026-11-26, Pedro): a caixa "Ligar agora" da Kvoip vem em primeiro no cartao aberto, para achar e clicar facil
+    (a, b) =>
+      Number(b.name === 'ligarAgora') - Number(a.name === 'ligarAgora') ||
+      a.name.localeCompare(b.name),
+  );
 
   return {
     inlineFieldMetadataItems: allInlineFieldMetadataItems,
